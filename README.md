@@ -1,4 +1,4 @@
-# Projet de départ
+# Projet de démarrage
 
 ## Prérequis
 
