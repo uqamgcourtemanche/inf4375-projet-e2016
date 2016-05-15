@@ -17,4 +17,7 @@ public class Citation {
   @JsonProperty public String getContenu() { return contenu; }
   @JsonProperty public String getAuteur() { return auteur; }
 
+  @Override public String toString() {
+    return String.format("«%s» --%s", contenu, auteur);
+  }
 }
