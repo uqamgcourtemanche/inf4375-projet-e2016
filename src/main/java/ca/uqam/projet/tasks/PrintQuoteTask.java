@@ -13,8 +13,8 @@ public class PrintQuoteTask {
 
   @Autowired CitationRepository repository;
 
-  // @Scheduled(cron="* * * * * ?") // à toutes les secondes.
+  @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
   public void printQuote() {
-    log.info(repository.findById(1).getContenu());
+    log.info(repository.findById(1).toString());
   }
 }
