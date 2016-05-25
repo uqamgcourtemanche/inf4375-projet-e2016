@@ -3,6 +3,9 @@ package ca.uqam.projet.repositories;
 import ca.uqam.projet.Application;
 import java.util.List;
 import ca.uqam.projet.resources.FoodTruck;
+import java.sql.Time;
+import java.text.ParseException;
+import java.util.Date;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,14 +39,40 @@ public class FoodTruckRepository {
     private boolean locationExists(FoodTruck ft, FoodTruck.Location location)
     {
         List<String> result = Application.app.jdbcTemplate.query("SELECT foodtruck_id from truck_location where foodtruck_id = ? and date = ?", new Object[]{ ft.getId(), location.getDate() },
-                 (rs, rowNum) -> rs.getString("id"));
+                 (rs, rowNum) -> rs.getString("foodtruck_id"));
         
         return !result.isEmpty();
     }
     
     private void createLocation(FoodTruck ft, FoodTruck.Location location)
     {
-        //todo
+        Date dateStart, dateEnd;
+        
+        try{
+            dateStart = new java.text.SimpleDateFormat("HH:mm").parse(location.getTimeStart());
+            dateEnd = new java.text.SimpleDateFormat("HH:mm").parse(location.getTimeEnd());
+        } catch( ParseException ex )
+        {
+            throw new RuntimeException(ex);
+        }
+        
+        Application.app.jdbcTemplate.update(
+                "INSERT INTO truck_location(date, foodtruck_id, timestart, timeend, coord) " 
+                + "VALUES (?,?,?,?, "
+                + "'(" 
+                + Double.toString(location.getCoord().getX())
+                + "," 
+                + Double.toString(location.getCoord().getY())
+                + ")'"
+                + ")", 
+                new Object[] { 
+                    location.getDate(), 
+                    ft.getId(), 
+                    new Time(dateStart.getTime()), 
+                    new Time(dateEnd.getTime())
+                }
+        );
+               
     }
 
 }
