@@ -57,8 +57,8 @@ public class FoodTruckRepository {
         }
         
         Application.app.jdbcTemplate.update(
-                "INSERT INTO truck_location(date, foodtruck_id, timestart, timeend, coord) " 
-                + "VALUES (?,?,?,?, "
+                "INSERT INTO truck_location(date, foodtruck_id, timestart, timeend, description, coord) " 
+                + "VALUES (?, ?, ?, ?, ?, "
                 + "'(" 
                 + Double.toString(location.getCoord().getX())
                 + "," 
@@ -69,7 +69,8 @@ public class FoodTruckRepository {
                     location.getDate(), 
                     ft.getId(), 
                     new Time(dateStart.getTime()), 
-                    new Time(dateEnd.getTime())
+                    new Time(dateEnd.getTime()),
+                    location.getLocationName()
                 }
         );
                
