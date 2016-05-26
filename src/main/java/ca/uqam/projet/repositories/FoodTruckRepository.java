@@ -6,6 +6,7 @@ import ca.uqam.projet.resources.FoodTruck;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.LinkedList;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,6 +22,40 @@ public class FoodTruckRepository {
                 if( !locationExists(ft, loc) ) createLocation(ft, loc);
             }
         }
+    }
+    
+    public List<FoodTruck> findAll()
+    {
+        List<FoodTruck> result = Application.app.jdbcTemplate.query("SELECT id, name from foodtrucks",
+                 (rs, rowNum) ->  new FoodTruck(rs.getString("id"), rs.getString("name"), new LinkedList<>()));
+        
+        return result;
+    }
+    
+    public List<FoodTruck> findByDate(Date start, Date end)
+    {
+        List<FoodTruck> result = Application.app.jdbcTemplate.query("SELECT id, name from foodtrucks",
+                 (rs, rowNum) ->  new FoodTruck(
+                         rs.getString("id"), 
+                         rs.getString("name"), 
+                         findLocations(rs.getString("id"), start, end)));
+        
+        return result;
+    }
+    
+    private List<FoodTruck.Location> findLocations(String id, Date start, Date end)
+    {
+        List<FoodTruck.Location> result = Application.app.jdbcTemplate.query(
+                "SELECT date, timeStart, timeEnd, description, coord[0] as x, coord[1] as y from truck_location where foodtruck_id = ? and date >= ? and date <= ?",
+                new Object[] { id, start, end },
+                (rs, rowNum) -> new FoodTruck.Location(
+                        rs.getDate("date"), 
+                        rs.getTime("timeStart").toString(), 
+                        rs.getTime("timeEnd").toString(),  
+                        rs.getString("description"), 
+                        new FoodTruck.Coordinates(rs.getDouble("x"), rs.getDouble("y"))));
+        
+        return result;
     }
     
     private boolean foodTruckExists(FoodTruck ft)
