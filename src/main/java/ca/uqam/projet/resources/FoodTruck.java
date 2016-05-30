@@ -68,6 +68,8 @@ public class FoodTruck {
             this.coord = coord;
         }
         
+        public Coordinates getCoord(){ return this.coord; }
+        
         public Date getDate() {
             return date;
         }
@@ -102,28 +104,28 @@ public class FoodTruck {
     }
     
     public static class Coordinates{
-        public Coordinates(double lng, double lat){
-            this.lng = lng;
-            this.lat = lat;
+        public Coordinates(double x, double y){
+            this.x = x;
+            this.y = y;
         }
 
-        public double getLng() {
-            return lng;
+        public double getX() {
+            return x;
         }
 
-        public void setLng(double lng) {
-            this.lng = lng;
+        public void setX(double x) {
+            this.x = x;
         }
 
-        public double getLat() {
-            return lat;
+        public double getY() {
+            return y;
         }
 
-        public void setLat(double lat) {
-            this.lat = lat;
+        public void setY(double y) {
+            this.y = y;
         }
         
-        private double lng; 
-        private double lat;
+        private double x; 
+        private double y;
     }
 }
