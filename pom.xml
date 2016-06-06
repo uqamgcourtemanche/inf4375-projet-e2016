@@ -53,6 +53,12 @@
 	</dependency>
 	
 	<dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.4.1208.jre7</version>
+    </dependency>
+	
+	<dependency>
         <groupId>com.fasterxml.jackson.dataformat</groupId>
         <artifactId>jackson-dataformat-xml</artifactId>
 	</dependency>
@@ -69,6 +75,7 @@
 	 </dependency>
 	
   </dependencies>  
+
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.source>1.8</maven.compiler.source>
