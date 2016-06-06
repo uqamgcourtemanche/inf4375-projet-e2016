@@ -1,0 +1,6 @@
+#mapid { height: 800px; }
+
+#eventForm .form-control-feedback {
+    top: 0;
+    right: -15px;
+}

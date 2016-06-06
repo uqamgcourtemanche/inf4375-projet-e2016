@@ -18,21 +18,22 @@ public class BixiRepository {
         List<StationBixi> toCreate = new LinkedList<>();
         List<StationBixi> toUpdate = new LinkedList<>();
         
-        stations.forEach((s) -> {
+        /*stations.forEach((s) -> {
             if( !stationExists(s) ) toCreate.add(s);
             else toUpdate.add(s);
-        });
+        });*/
         
-        createStations(toCreate);
-        updateStations(toUpdate);
+        //createStations(toCreate);
+        //updateStations(toUpdate);
     }
     
     private boolean stationExists(StationBixi s)
     {
-        List<Integer> result = Application.app.jdbcTemplate.query("SELECT id from bixi where id = ? ", new Object[]{ new Integer(s.getId()) },
+        /*List<Integer> result = Application.app.jdbcTemplate.query("SELECT id from bixi where id = ? ", new Object[]{ new Integer(s.getId()) },
                  (rs, rowNum) -> rs.getInt("id")  );
         
-        return !result.isEmpty();
+        return !result.isEmpty();*/
+        return false;
     }
     
     private void updateStations(List<StationBixi> stations)
@@ -49,7 +50,7 @@ public class BixiRepository {
     
     private void createStations(List<StationBixi> stations)
     {
-        if( stations.isEmpty() ) return;
+        /*if( stations.isEmpty() ) return;
         
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
@@ -59,6 +60,7 @@ public class BixiRepository {
         Application.app.jdbcTemplate.batchUpdate(
                 "INSERT INTO bixi(id, name, terminalName, nbBikes, nbEmptyDocks, coord) " +
                 "VALUES (?,?,?,?,?, ?)", args);
+        */
     }
     
 }
