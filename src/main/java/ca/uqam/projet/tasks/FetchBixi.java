@@ -40,7 +40,7 @@ public class FetchBixi {
             ));
         });
         
-        //new BixiRepository().update(models);
+        new BixiRepository().update(models);
     }
 
     @XmlRootElement(name = "stations")

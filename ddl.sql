@@ -33,3 +33,24 @@ WITH (
 );
 ALTER TABLE public.truck_location
   OWNER TO web_server;
+
+-- Table: public.bixi
+
+-- DROP TABLE public.bixi;
+
+CREATE TABLE public.bixi
+(
+  id integer NOT NULL,
+  name text,
+  terminal_name text,
+  nb_bikes integer,
+  nb_empty_docks integer,
+  x double precision,
+  y double precision,
+  CONSTRAINT bixi_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.bixi
+  OWNER TO postgres;
