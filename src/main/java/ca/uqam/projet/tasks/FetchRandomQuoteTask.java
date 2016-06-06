@@ -17,7 +17,7 @@ public class FetchRandomQuoteTask {
   private static final Logger log = LoggerFactory.getLogger(FetchRandomQuoteTask.class);
   private static final String URL = "http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=3";
 
-  @Scheduled(cron="*/2 * * * * ?") // à toutes les 2 secondes.
+  @Scheduled(cron="* 1 * * * ?") // à toutes les 2 secondes.
   public void execute() {
     Arrays.asList(new RestTemplate().getForObject(URL, RandomQuote[].class)).stream()
       .map(this::asCitation)

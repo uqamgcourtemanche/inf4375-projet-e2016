@@ -20,10 +20,9 @@ import org.springframework.web.client.RestTemplate;
 public class FetchFoodTruck {
 	
     private static final String URL = "http://camionderue.com/donneesouvertes/geojson";
-    private static final Logger log = LoggerFactory.getLogger(FetchRandomQuoteTask.class);
+    private static final Logger log = LoggerFactory.getLogger(FetchFoodTruck.class);
     
-    //@Scheduled(cron="0 0 0/12 * * *")
-    @Scheduled(cron="*/2 * * * * *")
+    @Scheduled(cron="0 0 0/12 * * *")
     public void execute(){
         FeatureCollection c = new RestTemplate().getForObject(URL, FeatureCollection.class);
        
