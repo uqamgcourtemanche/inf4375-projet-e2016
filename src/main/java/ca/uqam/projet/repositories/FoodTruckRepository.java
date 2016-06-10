@@ -46,7 +46,9 @@ public class FoodTruckRepository {
     private List<FoodTruck.Location> findLocations(String id, Date start, Date end)
     {
         List<FoodTruck.Location> result = Application.app.jdbcTemplate.query(
-                "SELECT date, timeStart, timeEnd, description, coord[0] as x, coord[1] as y from truck_location where foodtruck_id = ? and date >= ? and date <= ?",
+                "SELECT date, timeStart, timeEnd, description, coord[0] as x, coord[1] as y "
+                + "from truck_location "
+                + "where foodtruck_id = ? and date >= ? and date <= ?",
                 new Object[] { id, start, end },
                 (rs, rowNum) -> new FoodTruck.Location(
                         rs.getDate("date"), 
@@ -54,7 +56,9 @@ public class FoodTruckRepository {
                         rs.getTime("timeEnd").toString(),  
                         rs.getString("description"), 
                         new FoodTruck.Coordinates(rs.getDouble("x"), rs.getDouble("y"))));
-        
+        System.out.println("start:"+start);
+        System.out.println("end:"+end);
+        System.out.println(result);
         return result;
     }
     
