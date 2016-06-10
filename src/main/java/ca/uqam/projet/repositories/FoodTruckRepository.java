@@ -56,9 +56,6 @@ public class FoodTruckRepository {
                         rs.getTime("timeEnd").toString(),  
                         rs.getString("description"), 
                         new FoodTruck.Coordinates(rs.getDouble("x"), rs.getDouble("y"))));
-        System.out.println("start:"+start);
-        System.out.println("end:"+end);
-        System.out.println(result);
         return result;
     }
     
