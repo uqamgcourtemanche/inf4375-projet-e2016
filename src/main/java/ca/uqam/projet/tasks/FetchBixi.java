@@ -19,8 +19,8 @@ public class FetchBixi {
     private static final String URL = "https://montreal.bixi.com/data/bikeStations.xml";
     private static final Logger log = LoggerFactory.getLogger(FetchBixi.class);
     
-    //@Scheduled(cron="0 0 0/12 * * *")
-    @Scheduled(cron="*/2 * * * * *")
+    @Scheduled(cron="0 0 0/12 * * *")
+    //@Scheduled(cron="*/2 * * * * *")
     public void execute(){
         RestTemplate rs = new RestTemplate();
         

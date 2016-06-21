@@ -39,7 +39,6 @@ public class FoodTruckRepository {
                          rs.getString("id"), 
                          rs.getString("name"), 
                          findLocations(rs.getString("id"), start, end)));
-        
         return result;
     }
     

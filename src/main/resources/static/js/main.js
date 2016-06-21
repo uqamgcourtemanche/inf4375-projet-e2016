@@ -35,9 +35,10 @@ $(document).ready(function(){
 
         $.get("/horaires-camions", {du : dateDebut, au : dateFin}).done(
             function(data){ 
+                emptyMap();
                 for(var i = 0 ; i < data.length ; i++){
                     if(data[i].locations.length > 0){
-                            addFoodTruckMarkerToMap(data[i]);
+                        addFoodTruckMarkerToMap(data[i]);
                     }
                 }
             });
@@ -67,7 +68,6 @@ $(document).ready(function(){
         listeBixi.push(circle);
     }
     function addFoodTruckMarkerToMap(foodtruck){
-        emptyMap();
         for(var j = 0 ; j < foodtruck.locations.length ; j++){
             var marker = L.marker([
                 foodtruck.locations[j].coord.y,
