@@ -27,7 +27,6 @@ public class BixiRepository {
                          rs.getDouble("y"))
         );
         
-        
         return result;
     }
     
