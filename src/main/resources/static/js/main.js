@@ -1,4 +1,8 @@
 $(document).ready(function(){
+    $.get("/bixi", {x : "10", y : "10"}).done(
+        function(data){ 
+            console.log(data);
+        });
     $("#btnRechercheHeure").click(function(){
         emptyMap();
     	var dateDebut = document.getElementById("inpDateDebut").value;
@@ -23,7 +27,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 		'Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	id: 'mapbox.streets'
 }).addTo(mymap);
-
+var listeMarker = [];
 /*
  * ici c'est la partie qu'il reste à faire pour avoir fini la partie foodTrucks
  * je n'ai aucune idée de comment retirer un marker
@@ -53,8 +57,10 @@ function addBixiToMap(j){
 		"</br>" + 
 		"Place libre:" + (dataBixi[j].nombreTotal - dataBixi[j].nombreUtilise)
 	).addTo(mymap);
+        listeMarker.push(circle);
 }
 function addFoodTruckMarkerToMap(foodtruck){
+    emptyMap();
     for(var j = 0 ; j < foodtruck.locations.length ; j++){
         var marker = L.marker([
             foodtruck.locations[j].coord.y,
@@ -73,6 +79,7 @@ function addFoodTruckMarkerToMap(foodtruck){
                 + "date: "+ foodtruck.locations[j].date
         ).openPopup();
         marker.addTo(mymap).on("click", showBixyAroundFoodTruck);
+        listeMarker.push(marker);
     }
 }
 function showBixyAroundFoodTruck(e) {
@@ -84,3 +91,11 @@ function showBixyAroundFoodTruck(e) {
 	}
 	console.log(request);
 }
+
+function emptyMap(){
+    console.log("emptyMap");
+    for(var i = 0 ; i < listeMarker.length; i++){
+        mymap.removeLayer(listeMarker[i]);
+    }
+}
+

@@ -14,6 +14,23 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BixiRepository {
     
+    public List<StationBixi> findAll()
+    {
+        List<StationBixi> result = Application.app.jdbcTemplate.query("SELECT id, name, terminal_name, nb_bikes, nb_empty_docks, x, y from bixi",
+                 (rs, rowNum) ->  new StationBixi(
+                         rs.getInt("id"),
+                         rs.getString("name"),
+                         rs.getString("terminal_name"),
+                         rs.getInt("nb_bikes"),
+                         rs.getInt("nb_empty_docks"),
+                         rs.getDouble("x"),
+                         rs.getDouble("y"))
+        );
+        
+        
+        return result;
+    }
+    
     public void update(List<StationBixi> stations)
     {
         List<StationBixi> toCreate = new LinkedList<>();
@@ -59,7 +76,7 @@ public class BixiRepository {
         });
         
         Application.app.jdbcTemplate.batchUpdate(
-                "INSERT INTO bixi(id name, terminal_name, nb_bikes, nb_empty_docks, x, y) " +
+                "INSERT INTO bixi(id, name, terminal_name, nb_bikes, nb_empty_docks, x, y) " +
                 "VALUES (?,?,?,?,?,?,?)", args);
     }
     
