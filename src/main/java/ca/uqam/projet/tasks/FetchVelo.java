@@ -5,11 +5,15 @@
  */
 package ca.uqam.projet.tasks;
 
+import ca.uqam.projet.resources.Velo;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +32,34 @@ public class FetchVelo {
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responceCode);
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-
-        while ((inputLine = br.readLine()) != null) {
-            System.out.println(inputLine);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String inputLine;
+            String response = "";
+            
+            while ((inputLine = br.readLine()) != null) {
+                response = response + (inputLine) + "\n";
+            }
+            convertCsvToStringList(response);
+            
+        }catch(Exception e){
+            System.out.println(e);
         }
-        br.close();
+    }
+    private Map convertCsvToStringList(String CsvList){
+        Map<String, ArrayList<String>> maps = new HashMap<String, ArrayList<String>>();
+        int firstLinePosition = CsvList.indexOf("\n");
+        
+        String titleString = CsvList.substring(0, firstLinePosition);
+        String valueString = CsvList.substring(titleString.length());
+        String[] titleList = titleString.split(",");
+        String[] valueList = valueString.replaceAll("\n", ",").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        
+        for(int i = 0 ; i < titleList.length ; i++){
+            maps.put(titleList[i], new ArrayList<>());
+        }
+        for(int i = 0 ; i < valueList.length ; i++){
+            maps.get(titleList[i%titleList.length]).add(valueList[i]);
+        }
+        return maps;
     }
 }
