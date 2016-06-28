@@ -14,6 +14,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 $(document).ready(function(){
     var listeMarker = [];
     var listeBixi = [];
+    var listeVelo = [];
     
     //mettre la date par défaut //////////////
     var now = new Date();
@@ -87,6 +88,7 @@ $(document).ready(function(){
             ).openPopup();
             marker.addTo(mymap).on("click", function(){
                 removeBixi();
+                removeVelo();
                 $.get("/bixi", {x : this._latlng.lng, y : this._latlng.lat}).done(
                 function(data){ 
                     for(var i = 0 ; i < data.length ; i++){
@@ -112,6 +114,11 @@ $(document).ready(function(){
     function removeBixi(){
         for(var i = 0 ; i < listeBixi.length ; i++){
             mymap.removeLayer(listeBixi[i]);
+        }
+    }
+    function removeVelo(){
+        for(var i = 0 ; i < listeVelo.length ; i++){
+            mymap.removeLayer(listeVelo[i]);
         }
     }
 });

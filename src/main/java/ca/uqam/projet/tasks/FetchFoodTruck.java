@@ -10,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 public class FetchFoodTruck {
 	
     private static final String URL = "http://camionderue.com/donneesouvertes/geojson";
-    private static final Logger log = LoggerFactory.getLogger(FetchFoodTruck.class);
     
     //@Scheduled(cron="0 0 0/12 * * *")
     @Scheduled(cron="*/2 * * * * *")
