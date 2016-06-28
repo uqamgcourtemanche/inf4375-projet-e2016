@@ -29,8 +29,6 @@ public class FetchVelo {
 
         connection.setRequestMethod("GET");
         int responceCode = connection.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responceCode);
         
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String inputLine;
