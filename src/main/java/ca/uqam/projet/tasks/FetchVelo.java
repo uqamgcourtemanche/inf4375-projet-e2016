@@ -34,25 +34,33 @@ public class FetchVelo {
         
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String inputLine;
-            String response = "";
+            String value = "";
+            String header;
+            
+            header = br.readLine();
             
             while ((inputLine = br.readLine()) != null) {
-                response = response + (inputLine) + "\n";
+                value = value + (inputLine) + "\n";
             }
-            convertCsvToStringList(response);
-            
+            convertListToListVelo(convertCsvToStringList(header, value));
         }catch(Exception e){
             System.out.println(e);
         }
     }
-    private Map convertCsvToStringList(String CsvList){
-        Map<String, ArrayList<String>> maps = new HashMap<String, ArrayList<String>>();
-        int firstLinePosition = CsvList.indexOf("\n");
+    
+    ///
+    // Take two list, one that is the header of the csv file 
+    // and the other is the content of the csv file
+    //
+    // Return a map of all key-value
+    //
+    // difficile a comprendre, le code est un peu getho
+    ////
+    private Map convertCsvToStringList(String header, String CsvList){
+        Map<String, ArrayList<String>> maps = new HashMap<>();
         
-        String titleString = CsvList.substring(0, firstLinePosition);
-        String valueString = CsvList.substring(titleString.length());
-        String[] titleList = titleString.split(",");
-        String[] valueList = valueString.replaceAll("\n", ",").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String[] titleList = header.split(",");
+        String[] valueList = CsvList.replaceAll("\\r?\\n", ",").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
         
         for(int i = 0 ; i < titleList.length ; i++){
             maps.put(titleList[i], new ArrayList<>());
@@ -61,5 +69,20 @@ public class FetchVelo {
             maps.get(titleList[i%titleList.length]).add(valueList[i]);
         }
         return maps;
+    }
+    ///
+    // convert a map into a list of velo
+    // difficile a comprendre, le code est un peu getho
+    ///
+    private ArrayList<Velo> convertListToListVelo(Map map){
+        ArrayList<Velo> listVelo = new ArrayList<>();
+        for(int i = 1 ; i < map.size() ; i++){
+            Velo velo = new Velo();
+            velo.setId(((ArrayList)map.get("INV_ID")).get(i).toString());
+            velo.setX(Double.parseDouble(((ArrayList)map.get("LONG")).get(i).toString()));
+            velo.setY(Double.parseDouble(((ArrayList)map.get("LAT")).get(i).toString()));
+            listVelo.add(velo);
+        }
+        return listVelo;
     }
 }
