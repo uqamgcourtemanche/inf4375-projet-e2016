@@ -27,7 +27,7 @@ public class FetchFoodTruck {
         List<FoodTruck> fts = new LinkedList<>();
         for( Feature ft : c.features ) fts.add(ExtractFoodtruck(ft));
 
-        new FoodTruckRepository().update(fts);
+        FoodTruckRepository.update(fts);
     }
     
     private FoodTruck ExtractFoodtruck(Feature feature){
