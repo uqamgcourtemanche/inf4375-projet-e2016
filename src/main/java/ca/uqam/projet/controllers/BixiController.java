@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
 public class BixiController {
+    
+    static final double DISTANCE_MAXIMAL_DU_FOOD_TRUCK = 200.0; 
     
     @Autowired
     BixiRepository repository;
     
     @RequestMapping("/bixi")
     public List<StationBixi> findAllNearFoodtruck(
-            @RequestParam(value="x", defaultValue="") String y,
-            @RequestParam(value="y", defaultValue="") String x ) 
+            @RequestParam(value="x", defaultValue="") String x,
+            @RequestParam(value="y", defaultValue="") String y ) 
     {
         if( x.equals("") || y.equals("") )
         {
@@ -36,19 +37,10 @@ public class BixiController {
             throw new RuntimeException(ex);
         }
         
-        return removeAllBixiToFar(repository.findAll(), coordX, coordY);
-    }
-    
-    //la partis plus bas est à refaire c'est un peu getho
-    private List<StationBixi> removeAllBixiToFar(List<StationBixi> liste, double foodTruckX, double foodTruckY){
-        final int DISTANCE_MAXIMAL_DU_FOOD_TRUCK = 200; 
+        System.out.println("Request for bixi");
         
-        for(int i = 0 ; i < liste.size() ; i++){
-            if(Distance.distance(foodTruckX, foodTruckY, liste.get(i).getX(), liste.get(i).getY(), "K")*1000 > DISTANCE_MAXIMAL_DU_FOOD_TRUCK){
-                liste.set(i, null);
-            }
-        }
-        liste.removeAll(Collections.singleton(null));
-        return liste;
+        List<StationBixi> result =  repository.findAllWithinDist(coordX, coordY, BixiController.DISTANCE_MAXIMAL_DU_FOOD_TRUCK);
+        System.out.println("Nb resultat " + Integer.toString(result.size()));
+        return result;
     }
 }

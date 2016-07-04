@@ -10,6 +10,32 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BixiRepository {
 
+    public static List<StationBixi> findAllWithinDist(double x, double y, double dist)
+    {
+        List<StationBixi> result = null;
+        String queryDist = Double.toString(dist);
+        String queryPoint = "POINT(" + Double.toString(x) + " " + Double.toString(y) + ")";
+        String query =  "select * from bixi where " +
+            "ST_DWithin( "
+                + "ST_SetSRID(ST_MakePoint(bixi.x, bixi.y), 4326), "
+                + "ST_GeogFromText('" + queryPoint + "'), " + queryDist + ");";
+        
+        System.out.println(query);
+        
+        result = Application.app.jdbcTemplate.query(query,
+                (rs, rowNum) ->  new StationBixi(
+                         rs.getInt("id"),
+                         rs.getString("name"),
+                         rs.getString("terminal_name"),
+                         rs.getInt("nb_bikes"),
+                         rs.getInt("nb_empty_docks"),
+                         rs.getDouble("x"),
+                         rs.getDouble("y"))
+        );
+        
+        return result;
+    }
+
     public static List<StationBixi> findAll()
     {
         List<StationBixi> result = Application.app.jdbcTemplate.query("SELECT id, name, terminal_name, nb_bikes, nb_empty_docks, x, y from bixi",
