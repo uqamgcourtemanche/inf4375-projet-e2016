@@ -14,6 +14,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BixiRepository {
     
+    public List<StationBixi> getBixiForFoodTruck(FoodTruck ft)
+    {
+        return null;
+    }
+    
     public void update(List<StationBixi> stations)
     {
         List<StationBixi> toCreate = new LinkedList<>();

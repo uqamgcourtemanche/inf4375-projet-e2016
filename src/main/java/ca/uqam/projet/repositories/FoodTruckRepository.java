@@ -24,6 +24,13 @@ public class FoodTruckRepository {
         }
     }
     
+    public FoodTruck findById(int id)
+    {   
+        FoodTruck ft = null;
+        List<FoodTruck> result = Application.app.jdbcTemplate.query("SELECT id, name from foodtrucks",
+                 (rs, rowNum) ->  new FoodTruck(rs.getString("id"), rs.getString("name"), new LinkedList<>()));
+    }   
+    
     public List<FoodTruck> findAll()
     {
         List<FoodTruck> result = Application.app.jdbcTemplate.query("SELECT id, name from foodtrucks",
