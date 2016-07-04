@@ -2,6 +2,13 @@ package ca.uqam.projet.resources;
 
 public class StationBixi {
 
+    private int id;
+    private String name;
+    private String terminalName;
+    private int nbBikes;
+    private int nbEmptyDocks;
+    private double x, y;
+    
     public StationBixi(int id, String name, String terminalName, int nbBikes, int nbEmptyDocks, double x, double y) {
         this.id = id;
         this.name = name;
@@ -68,11 +75,6 @@ public class StationBixi {
         this.y = y;
     }
     
-    private int id;
-    private String name;
-    private String terminalName;
-    private int nbBikes;
-    private int nbEmptyDocks;
-    private double x, y;
+
     
 }

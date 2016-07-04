@@ -38,7 +38,6 @@ public class FoodTruckController {
         {
             throw new RuntimeException(ex);
         }
-        
         return repository.findByDate(startDate, endDate);
     }
     

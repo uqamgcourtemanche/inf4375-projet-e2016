@@ -2,24 +2,31 @@ package ca.uqam.projet.repositories;
 
 import ca.uqam.projet.Application;
 import java.util.List;
-import ca.uqam.projet.resources.FoodTruck;
 import ca.uqam.projet.resources.StationBixi;
-import java.sql.Time;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.LinkedList;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
 public class BixiRepository {
-    
-    public List<StationBixi> getBixiForFoodTruck(FoodTruck ft)
+
+    public static List<StationBixi> findAll()
     {
-        return null;
+        List<StationBixi> result = Application.app.jdbcTemplate.query("SELECT id, name, terminal_name, nb_bikes, nb_empty_docks, x, y from bixi",
+                 (rs, rowNum) ->  new StationBixi(
+                         rs.getInt("id"),
+                         rs.getString("name"),
+                         rs.getString("terminal_name"),
+                         rs.getInt("nb_bikes"),
+                         rs.getInt("nb_empty_docks"),
+                         rs.getDouble("x"),
+                         rs.getDouble("y"))
+        );
+        
+        return result;
     }
     
-    public void update(List<StationBixi> stations)
+    public static void update(List<StationBixi> stations)
     {
         List<StationBixi> toCreate = new LinkedList<>();
         List<StationBixi> toUpdate = new LinkedList<>();
@@ -33,7 +40,7 @@ public class BixiRepository {
         updateStations(toUpdate);
     }
     
-    private boolean stationExists(StationBixi s)
+    private static boolean stationExists(StationBixi s)
     {
         List<Integer> result = Application.app.jdbcTemplate.query("SELECT id from bixi where id = ? ", new Object[]{ s.getId() },
                  (rs, rowNum) -> rs.getInt("id")  );
@@ -41,7 +48,7 @@ public class BixiRepository {
         return !result.isEmpty();
     }
     
-    private void updateStations(List<StationBixi> stations)
+    private static void updateStations(List<StationBixi> stations)
     {
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
@@ -54,7 +61,7 @@ public class BixiRepository {
                 , args);
     }
     
-    private void createStations(List<StationBixi> stations)
+    private static void createStations(List<StationBixi> stations)
     {
         if( stations.isEmpty() ) return;
         
@@ -64,7 +71,7 @@ public class BixiRepository {
         });
         
         Application.app.jdbcTemplate.batchUpdate(
-                "INSERT INTO bixi(id name, terminal_name, nb_bikes, nb_empty_docks, x, y) " +
+                "INSERT INTO bixi(id, name, terminal_name, nb_bikes, nb_empty_docks, x, y) " +
                 "VALUES (?,?,?,?,?,?,?)", args);
     }
     

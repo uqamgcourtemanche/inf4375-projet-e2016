@@ -1,76 +1,129 @@
-$(document).ready(function(){
-    $("#btnRechercheHeure").click(function(){
-    	var dateDebut = document.getElementById("inpDateDebut").value;
-    	var dateFin = document.getElementById("inpDateFin").value; 
+/* global L */
 
-    	var requete = "GET /horaire-camion?du="+dateDebut+"&au="+dateFin;
-    	console.log(requete);
+var mymap = L.map('mapid').setView([45.5017, -73.5673], 10);
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    id: 'mapbox.streets'
+}).addTo(mymap);
+
+var listeMarker = [];
+var listeBixi = [];
+var listeVelo = [];
+
+$(document).ready(function () {
+
+    //mettre la date par défaut //////////////
+    var now = new Date();
+    var month = (now.getMonth() + 1);
+    var day = now.getDate();
+    if (month < 10)
+        month = "0" + month;
+    if (day < 10)
+        day = "0" + day;
+    var today = now.getFullYear() + '-' + month + '-' + day;
+    $('#inpDateDebut').val(today);
+    $('#inpDateFin').val(today);
+    //Fin mettre la date par défaut ///////////
+
+    $("#btnRechercheHeure").click(function () {
+        emptyMap();
+        var dateDebut = document.getElementById("inpDateDebut").value;
+        var dateFin = document.getElementById("inpDateFin").value;
+
+        $.get("/horaires-camions", {du: dateDebut, au: dateFin}).done(
+                function (data) {
+                    emptyMap();
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].locations.length > 0) {
+                            addFoodTruckMarkerToMap(data[i]);
+                        }
+                    }
+                });
     });
 });
 
-var mymap = L.map('mapid').setView([45.5017, -73.5673], 10);
-/*var iconeBixi = L.icon({iconUrl:'EchangeInternetTest\\Images\\bixi.jpg', iconSize:[40,30]});*/
-/*var iconeVelo = L.icon({iconUrl:'EchangeInternetTest\\Images\\Velo.jpg', iconSize:[40,30]});*/
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-		'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-		'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-	id: 'mapbox.streets'
-}).addTo(mymap);
 
-//initialise la carte avec tous les food trucks
-for (var i = 0; i < dataFoodTruck.features.length; i++) {
-	addFoodTruckMarkerToMap(i);
+function addBixiToMap(data) {
+    var circle = L.circle([
+        data.x,
+        data.y
+    ], 20, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).bindPopup(
+            "<div style='text-align: center;''>" +
+            "<b>" +
+            data.name +
+            "</b>" +
+            "</div>" +
+            "</br>" +
+            "Place utilise:" + data.nbBikes +
+            "</br>" +
+            "Place libre:" + data.nbEmptyDocks +
+            "</br>" +
+            "Place total:" + (data.nbBikes + data.nbEmptyDocks)
+            ).addTo(mymap);
+    listeBixi.push(circle);
+}
+function addFoodTruckMarkerToMap(foodtruck) {
+
+    for (var j = 0; j < foodtruck.locations.length; j++) {
+        var marker = L.marker([
+            foodtruck.locations[j].coord.y,
+            foodtruck.locations[j].coord.x
+        ]).bindPopup(
+                "<div style='text-align: center;''>"
+                + "<b>"
+                + foodtruck.name
+                + "</b>"
+                + "</div>"
+                + "</br>"
+                + "Heure d'ouverture: " + foodtruck.locations[j].timeStart
+                + "<br>"
+                + "Heure de fermeture: " + foodtruck.locations[j].timeEnd
+                + "<br>"
+                + "date: " + foodtruck.locations[j].date
+                ).openPopup();
+        marker.addTo(mymap).on("click", function () {
+            removeBixi();
+            removeVelo();
+            $.get("/bixi", {x: this._latlng.lng, y: this._latlng.lat}).done(
+                    function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            addBixiToMap(data[i]);
+                        }
+                        console.log(data);
+                    });
+        });
+        listeMarker.push(marker);
+    }
 }
 
-function addBixiToMap(j){
-	var circle = L.circle([
-		dataBixi[j].coordinateX, 
-		dataBixi[j].coordinateY 
-	], 5, {
-		color: 'red',
-	    fillColor: '#f03',
-	    fillOpacity: 0.5
-	}).bindPopup(
-		"<div style='text-align: center;''>"+
-			"<b>"+
-		dataBixi[j].nom + 
-			"</b>"+
-		"</div>"+
-		"</br>" + 
-		"Place utilise:" + dataBixi[j].nombreUtilise + 
-		"</br>" + 
-		"Place total:" + dataBixi[j].nombreTotal + 
-		"</br>" + 
-		"Place libre:" + (dataBixi[j].nombreTotal - dataBixi[j].nombreUtilise)
-	).addTo(mymap);
+function emptyMap() {
+    console.log("emptyMap");
+    var i;
+    for (i = 0; i < listeMarker.length; i++) {
+        mymap.removeLayer(listeMarker[i]);
+    }
+    for (i = 0; i < listeBixi.length; i++) {
+        mymap.removeLayer(listeBixi[i]);
+    }
 }
-function addFoodTruckMarkerToMap(i){
-	var marker = L.marker([
-		dataFoodTruck.features[i].geometry.coordinates[1], 
-		dataFoodTruck.features[i].geometry.coordinates[0]
-	]).bindPopup(
-		"<div style='text-align: center;''>"
-			+"<b>"+
-				dataFoodTruck.features[i].properties.Lieu
-			+"</b>"
-		+"</div>"+
-		+"</br>"+
-		dataFoodTruck.features[i].properties.Heure_debut
-		+"<br>"+
-		dataFoodTruck.features[i].properties.Heure_fin
-		+"<br>"+
-		dataFoodTruck.features[i].properties.Date
-	).openPopup();
-	marker.addTo(mymap).on("click", showBixyAroundFoodTruck);
+function removeBixi() {
+    for (var i = 0; i < listeBixi.length; i++) {
+        mymap.removeLayer(listeBixi[i]);
+    }
 }
-function showBixyAroundFoodTruck(e) {
-	var coord = this.getLatLng();
-	var request = "GET /bixy?"+coord.lat+"&/"+coord.lng;
-	//c'est ici qu'il faut construire le json pour faire la map
-	for(var j = 0 ; j < dataBixi.length; j++){
-		addBixiToMap(j);
-	}
-	console.log(request);
+function removeVelo() {
+    for (var i = 0; i < listeVelo.length; i++) {
+        mymap.removeLayer(listeVelo[i]);
+    }
 }
+
+
+

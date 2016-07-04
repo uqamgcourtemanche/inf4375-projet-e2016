@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
 import org.springframework.scheduling.annotation.*;
@@ -17,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 public class FetchBixi {
 	
     private static final String URL = "https://montreal.bixi.com/data/bikeStations.xml";
-    private static final Logger log = LoggerFactory.getLogger(FetchBixi.class);
     
     //@Scheduled(cron="0 0 0/12 * * *")
     @Scheduled(cron="*/2 * * * * *")
@@ -40,7 +37,7 @@ public class FetchBixi {
             ));
         });
         
-        new BixiRepository().update(models);
+        BixiRepository.update(models);
     }
 
     @XmlRootElement(name = "stations")
@@ -65,4 +62,6 @@ public class FetchBixi {
         public int nbEmptyDocks;
         public int lastUpdateTime;
     }
+    
+    //<iframe width="700" height="400" src="http://donnees.ville.montreal.qc.ca/dataset/arceaux-velos/resource/78dd2f91-2e68-4b8b-bb4a-44c1ab5b79b6/view/dc59d539-6276-4f02-b2b5-6ffbb26ca007" frameBorder="0"></iframe>
 }
