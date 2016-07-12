@@ -33,7 +33,7 @@ public class FetchBixi {
             models.add( new ca.uqam.projet.resources.StationBixi(
                     item.id, item.name, item.terminalName,
                     item.nbBikes, item.nbEmptyDocks, 
-                    item.lat, item.longitude
+                    item.longitude, item.lat
             ));
         });
         

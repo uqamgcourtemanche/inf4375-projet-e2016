@@ -24,6 +24,7 @@ public class FoodTruckRepository {
         }
     }
     
+
     public static List<FoodTruck> findAll()
     {
         List<FoodTruck> result = Application.app.jdbcTemplate.query("SELECT id, name from foodtrucks",
