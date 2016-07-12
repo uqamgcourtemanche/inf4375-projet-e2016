@@ -6,20 +6,20 @@ import java.util.List;
 
 public class FoodTruck {
 
-    public FoodTruck(){
+    public FoodTruck() {
         this.id = null;
         this.name = null;
         this.locations = new LinkedList<>();
         this.dirty = false;
     }
-    
-    public FoodTruck(String id, String name, List<Location> locations){
+
+    public FoodTruck(String id, String name, List<Location> locations) {
         this.id = id;
         this.name = name;
         this.locations = locations;
         this.dirty = false;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -41,35 +41,36 @@ public class FoodTruck {
     public boolean isDirty() {
         return dirty;
     }
-    
-    public List<Location> getLocations()
-    {
+
+    public List<Location> getLocations() {
         return locations;
     }
-    
+
     private String id;
     private String name;
     private List<Location> locations;
     private boolean dirty;
-    
-    public static class Location{
+
+    public static class Location {
+
         private Date date;
         private String timeStart;
         private String timeEnd;
         private String locationName;
         private Coordinates coord;
 
-        public Location(Date date, String timeStart, String timeEnd, String locationName, Coordinates coord)
-        {
+        public Location(Date date, String timeStart, String timeEnd, String locationName, Coordinates coord) {
             this.date = date;
             this.timeStart = timeStart;
             this.timeEnd = timeEnd;
             this.locationName = locationName;
             this.coord = coord;
         }
-        
-        public Coordinates getCoord(){ return this.coord; }
-        
+
+        public Coordinates getCoord() {
+            return this.coord;
+        }
+
         public Date getDate() {
             return date;
         }
@@ -102,9 +103,10 @@ public class FoodTruck {
             this.locationName = locationName;
         }
     }
-    
-    public static class Coordinates{
-        public Coordinates(double x, double y){
+
+    public static class Coordinates {
+
+        public Coordinates(double x, double y) {
             this.x = x;
             this.y = y;
         }
@@ -124,8 +126,8 @@ public class FoodTruck {
         public void setY(double y) {
             this.y = y;
         }
-        
-        private double x; 
+
+        private double x;
         private double y;
     }
 }

@@ -13,29 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class FoodTruckController {
-    
-    
+
     @RequestMapping("/horaires-camions")
     public List<FoodTruck> findAll(
-            @RequestParam(value="du", defaultValue="") String start,
-            @RequestParam(value="au", defaultValue="") String end ) 
-    {
-        if( start.equals("") || end.equals("") )
-        {
+            @RequestParam(value = "du", defaultValue = "") String start,
+            @RequestParam(value = "au", defaultValue = "") String end) {
+        if (start.equals("") || end.equals("")) {
             return FoodTruckRepository.findAll();
         }
-        
+
         Date startDate, endDate;
-        
-        try{
+
+        try {
             SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
             startDate = parser.parse(start);
             endDate = parser.parse(end);
-        } catch( ParseException ex )
-        {
+        } catch (ParseException ex) {
             throw new RuntimeException(ex);
         }
         return FoodTruckRepository.findByDate(startDate, endDate);
     }
-    
+
 }

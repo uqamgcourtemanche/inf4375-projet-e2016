@@ -8,7 +8,7 @@ public class StationBixi {
     private int nbBikes;
     private int nbEmptyDocks;
     private double x, y;
-    
+
     public StationBixi(int id, String name, String terminalName, int nbBikes, int nbEmptyDocks, double x, double y) {
         this.id = id;
         this.name = name;
@@ -74,7 +74,5 @@ public class StationBixi {
     public void setY(double y) {
         this.y = y;
     }
-    
 
-    
 }

@@ -10,5 +10,6 @@ package ca.uqam.projet.Utility;
  * @author Usager
  */
 public class Global {
-    public static final int DISTANCE_MAXIMAL_DU_FOODTRUCK = 500; 
+
+    public static final int DISTANCE_MAXIMAL_DU_FOODTRUCK = 500;
 }

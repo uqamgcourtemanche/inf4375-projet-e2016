@@ -13,34 +13,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class VeloController {
-    
+
     @RequestMapping("/velo")
     public List<Velo> findAllNearFoodtruck(
-            @RequestParam(value="x", defaultValue="") String x,
-            @RequestParam(value="y", defaultValue="") String y ) 
-    {
-        if( x.equals("") || y.equals("") )
-        {
+            @RequestParam(value = "x", defaultValue = "") String x,
+            @RequestParam(value = "y", defaultValue = "") String y) {
+        if (x.equals("") || y.equals("")) {
             return VeloRepository.findAll();
         }
         //il faut que je finise ici
         double coordX, coordY;
-        try{
+        try {
             coordY = Double.parseDouble(y);
             coordX = Double.parseDouble(x);
-        } catch( Exception ex )
-        {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        
+
         return removeAllVeloToFar(VeloRepository.findAll(), coordX, coordY);
     }
-    
+
     //la partis plus bas est à refaire c'est un peu getho
-    private List<Velo> removeAllVeloToFar(List<Velo> liste, double veloX, double veloY){
-        
-        for(int i = 0 ; i < liste.size() ; i++){
-            if(Distance.distance(veloX, veloY, liste.get(i).getX(), liste.get(i).getY(), "K") > Global.DISTANCE_MAXIMAL_DU_FOODTRUCK){
+    private List<Velo> removeAllVeloToFar(List<Velo> liste, double veloX, double veloY) {
+
+        for (int i = 0; i < liste.size(); i++) {
+            if (Distance.distance(veloX, veloY, liste.get(i).getX(), liste.get(i).getY(), "K") > Global.DISTANCE_MAXIMAL_DU_FOODTRUCK) {
                 liste.set(i, null);
             }
         }
