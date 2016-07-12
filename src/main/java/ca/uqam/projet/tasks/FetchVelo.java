@@ -1,5 +1,6 @@
 package ca.uqam.projet.tasks;
 
+import ca.uqam.projet.repositories.VeloRepository;
 import ca.uqam.projet.resources.Velo;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,6 +24,8 @@ public class FetchVelo {
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
 
         connection.setRequestMethod("GET");
+        
+        //on pourais faire dequoi avec cette variable ou l'enlever
         int responceCode = connection.getResponseCode();
         
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -35,7 +38,9 @@ public class FetchVelo {
             while ((inputLine = br.readLine()) != null) {
                 value = value + (inputLine) + "\n";
             }
-            convertListToListVelo(convertCsvToStringList(header, value));
+            ArrayList<Velo> listeVelo = convertListToListVelo(convertCsvToStringList(header, value));
+            VeloRepository.update(listeVelo);
+            
         }catch(Exception e){
             System.out.println(e);
         }
@@ -53,11 +58,14 @@ public class FetchVelo {
         Map<String, ArrayList<String>> maps = new HashMap<>();
         
         String[] titleList = header.split(",");
-        String[] valueList = CsvList.replaceAll("\\r?\\n", ",").split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        //regex qui prend les , qui ne sont pas entre ""
+        String[] valueList = CsvList.replaceAll("\\r?\\n", ",").split(",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)", -1);
         
-        for(int i = 0 ; i < titleList.length ; i++){
-            maps.put(titleList[i], new ArrayList<>());
+        //remplis l'array pour les titres
+        for (String titleList1 : titleList) {
+            maps.put(titleList1, new ArrayList<>());
         }
+        //remplis l'array pour les valeurs
         for(int i = 0 ; i < valueList.length ; i++){
             maps.get(titleList[i%titleList.length]).add(valueList[i]);
         }
@@ -69,12 +77,14 @@ public class FetchVelo {
     ///
     private ArrayList<Velo> convertListToListVelo(Map map){
         ArrayList<Velo> listVelo = new ArrayList<>();
-        for(int i = 1 ; i < map.size() ; i++){
-            Velo velo = new Velo();
-            velo.setId(((ArrayList)map.get("INV_ID")).get(i).toString());
-            velo.setX(Double.parseDouble(((ArrayList)map.get("LONG")).get(i).toString()));
-            velo.setY(Double.parseDouble(((ArrayList)map.get("LAT")).get(i).toString()));
-            listVelo.add(velo);
+        for(int i = 1 ; i < ((ArrayList)map.get("INV_ID")).size() ; i++){
+            if(!((ArrayList)map.get("INV_ID")).get(i).equals("")){
+                Velo velo = new Velo();
+                velo.setId(((ArrayList)map.get("INV_ID")).get(i).toString());
+                velo.setY(Double.parseDouble(((ArrayList)map.get("LONG")).get(i).toString()));
+                velo.setX(Double.parseDouble(((ArrayList)map.get("LAT")).get(i).toString()));
+                listVelo.add(velo);
+            }
         }
         return listVelo;
     }

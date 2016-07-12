@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class FoodTruckController {
     
-    @Autowired
-    FoodTruckRepository repository;
     
     @RequestMapping("/horaires-camions")
     public List<FoodTruck> findAll(
@@ -25,7 +22,7 @@ public class FoodTruckController {
     {
         if( start.equals("") || end.equals("") )
         {
-            return repository.findAll();
+            return FoodTruckRepository.findAll();
         }
         
         Date startDate, endDate;
@@ -38,7 +35,7 @@ public class FoodTruckController {
         {
             throw new RuntimeException(ex);
         }
-        return repository.findByDate(startDate, endDate);
+        return FoodTruckRepository.findByDate(startDate, endDate);
     }
     
 }

@@ -54,3 +54,23 @@ WITH (
 );
 ALTER TABLE public.bixi
   OWNER TO postgres;
+
+
+
+-- Table: public.velo
+
+-- DROP TABLE public.velo;
+
+CREATE TABLE public.velo
+(
+  id text NOT NULL,
+  x double precision,
+  y double precision,
+  CONSTRAINT velo_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.velo
+  OWNER TO postgres;
+

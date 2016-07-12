@@ -70,6 +70,42 @@ function addBixiToMap(data) {
             ).addTo(mymap);
     listeBixi.push(circle);
 }
+
+function addBixiToMap(data) {
+    var circle = L.circle([
+        data.x,
+        data.y
+    ], 20, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).bindPopup(
+            "<div style='text-align: center;''>" +
+            "<b>" +
+            data.name +
+            "</b>" +
+            "</div>" +
+            "</br>" +
+            "Place utilise:" + data.nbBikes +
+            "</br>" +
+            "Place libre:" + data.nbEmptyDocks +
+            "</br>" +
+            "Place total:" + (data.nbBikes + data.nbEmptyDocks)
+            ).addTo(mymap);
+    listeBixi.push(circle);
+}
+
+function addVeloToMap(data) {
+    var circle = L.circle([
+        data.x,
+        data.y
+    ], 20, {
+        color: 'blue',
+        fillOpacity: 0.5
+    }).addTo(mymap);
+    listeVelo.push(circle);
+}
+
 function addFoodTruckMarkerToMap(foodtruck) {
 
     for (var j = 0; j < foodtruck.locations.length; j++) {
@@ -92,10 +128,18 @@ function addFoodTruckMarkerToMap(foodtruck) {
         marker.addTo(mymap).on("click", function () {
             removeBixi();
             removeVelo();
-            $.get("/bixi", {x: this._latlng.lng, y: this._latlng.lat}).done(
+            $.get("/bixi", {y: this._latlng.lng, x: this._latlng.lat}).done(
                     function (data) {
                         for (var i = 0; i < data.length; i++) {
                             addBixiToMap(data[i]);
+                        }
+                        console.log(data);
+                    });
+                    
+            $.get("/velo", {y: this._latlng.lng, x: this._latlng.lat}).done(
+                    function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            addVeloToMap(data[i]);
                         }
                         console.log(data);
                     });
@@ -112,6 +156,9 @@ function emptyMap() {
     }
     for (i = 0; i < listeBixi.length; i++) {
         mymap.removeLayer(listeBixi[i]);
+    }
+    for (i = 0; i < listeVelo.length; i++) {
+        mymap.removeLayer(listeVelo[i]);
     }
 }
 function removeBixi() {

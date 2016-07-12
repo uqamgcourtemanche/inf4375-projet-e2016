@@ -36,13 +36,13 @@ public class Distance {
 		dist = Math.acos(dist);
 		dist = rad2deg(dist);
 		dist = dist * 60 * 1.1515;
-		if (unit == "K") {
+		if (unit.equals("K")) {
 			dist = dist * 1.609344;
-		} else if (unit == "N") {
+		} else if (unit.equals("N")) {
 			dist = dist * 0.8684;
 		}
 
-		return (dist);
+		return (dist)*1000;
 	}
 
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
