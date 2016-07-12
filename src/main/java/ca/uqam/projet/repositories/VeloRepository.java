@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository;
 public class VeloRepository {
 
     public static List<Velo> findAll() {
-        List<Velo> result = Application.app.jdbcTemplate.query("SELECT id, x, y from velo",
+        List<Velo> result = Application.app.jdbcTemplate.query("SELECT id, lon, lat from velo",
                 (rs, rowNum) -> new Velo(
                         rs.getString("id"),
-                        rs.getDouble("x"),
-                        rs.getDouble("y"))
+                        rs.getDouble("lon"),
+                        rs.getDouble("lat"))
         );
 
         return result;
@@ -46,12 +46,12 @@ public class VeloRepository {
     private static void updateStations(List<Velo> stations) {
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
-            args.add(new Object[]{s.getX(), s.getY(), s.getId()});
+            args.add(new Object[]{s.getLon(), s.getLat(), s.getId()});
         });
 
         Application.app.jdbcTemplate.batchUpdate(
                 "UPDATE velo SET "
-                + "x = ?, y = ? where id = ?", args);
+                + "lon = ?, lat = ? where id = ?", args);
     }
 
     private static void createStations(List<Velo> stations) {
@@ -61,11 +61,11 @@ public class VeloRepository {
 
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
-            args.add(new Object[]{s.getId(), s.getX(), s.getY()});
+            args.add(new Object[]{s.getId(), s.getLon(), s.getLat()});
         });
 
         Application.app.jdbcTemplate.batchUpdate(
-                "INSERT INTO velo(id, x, y) "
+                "INSERT INTO velo(id, lon, lat) "
                 + "VALUES (?,?,?)", args);
     }
 

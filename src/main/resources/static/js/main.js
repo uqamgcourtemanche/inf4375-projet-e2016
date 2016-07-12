@@ -49,32 +49,8 @@ $(document).ready(function () {
 
 function addBixiToMap(data) {
     var circle = L.circle([
-        data.x,
-        data.y
-    ], 20, {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5
-    }).bindPopup(
-            "<div style='text-align: center;''>" +
-            "<b>" +
-            data.name +
-            "</b>" +
-            "</div>" +
-            "</br>" +
-            "Place utilise:" + data.nbBikes +
-            "</br>" +
-            "Place libre:" + data.nbEmptyDocks +
-            "</br>" +
-            "Place total:" + (data.nbBikes + data.nbEmptyDocks)
-            ).addTo(mymap);
-    listeBixi.push(circle);
-}
-
-function addBixiToMap(data) {
-    var circle = L.circle([
-        data.x,
-        data.y
+        data.lat,
+        data.lon
     ], 20, {
         color: 'red',
         fillColor: '#f03',
@@ -97,8 +73,8 @@ function addBixiToMap(data) {
 
 function addVeloToMap(data) {
     var circle = L.circle([
-        data.x,
-        data.y
+        data.lat,
+        data.lon
     ], 20, {
         color: 'blue',
         fillOpacity: 0.5
@@ -107,11 +83,10 @@ function addVeloToMap(data) {
 }
 
 function addFoodTruckMarkerToMap(foodtruck) {
-
     for (var j = 0; j < foodtruck.locations.length; j++) {
         var marker = L.marker([
-            foodtruck.locations[j].coord.y,
-            foodtruck.locations[j].coord.x
+            foodtruck.locations[j].coord.lat,
+            foodtruck.locations[j].coord.lon
         ]).bindPopup(
                 "<div style='text-align: center;''>"
                 + "<b>"
@@ -128,20 +103,18 @@ function addFoodTruckMarkerToMap(foodtruck) {
         marker.addTo(mymap).on("click", function () {
             removeBixi();
             removeVelo();
-            $.get("/bixi", {y: this._latlng.lng, x: this._latlng.lat}).done(
+            $.get("/bixi", {x: this._latlng.lng, y: this._latlng.lat}).done(
                     function (data) {
                         for (var i = 0; i < data.length; i++) {
                             addBixiToMap(data[i]);
                         }
-                        console.log(data);
                     });
                     
-            $.get("/velo", {y: this._latlng.lng, x: this._latlng.lat}).done(
+            $.get("/velo", {x: this._latlng.lng, y: this._latlng.lat}).done(
                     function (data) {
                         for (var i = 0; i < data.length; i++) {
                             addVeloToMap(data[i]);
                         }
-                        console.log(data);
                     });
         });
         listeMarker.push(marker);
@@ -149,7 +122,6 @@ function addFoodTruckMarkerToMap(foodtruck) {
 }
 
 function emptyMap() {
-    console.log("emptyMap");
     var i;
     for (i = 0; i < listeMarker.length; i++) {
         mymap.removeLayer(listeMarker[i]);

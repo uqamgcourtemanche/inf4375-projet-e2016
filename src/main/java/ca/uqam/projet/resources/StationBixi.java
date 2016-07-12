@@ -7,16 +7,16 @@ public class StationBixi {
     private String terminalName;
     private int nbBikes;
     private int nbEmptyDocks;
-    private double x, y;
+    private double lon, lat;
 
-    public StationBixi(int id, String name, String terminalName, int nbBikes, int nbEmptyDocks, double x, double y) {
+    public StationBixi(int id, String name, String terminalName, int nbBikes, int nbEmptyDocks, double lon, double lat) {
         this.id = id;
         this.name = name;
         this.terminalName = terminalName;
         this.nbBikes = nbBikes;
         this.nbEmptyDocks = nbEmptyDocks;
-        this.x = x;
-        this.y = y;
+        this.lon = lon;
+        this.lat = lat;
     }
 
     public int getId() {
@@ -59,20 +59,20 @@ public class StationBixi {
         this.nbEmptyDocks = nbEmptyDocks;
     }
 
-    public double getX() {
-        return x;
+    public double getLon() {
+        return lon;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setLon(double x) {
+        this.lon = x;
     }
 
-    public double getY() {
-        return y;
+    public double getLat() {
+        return lat;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setLat(double y) {
+        this.lat = y;
     }
 
 }

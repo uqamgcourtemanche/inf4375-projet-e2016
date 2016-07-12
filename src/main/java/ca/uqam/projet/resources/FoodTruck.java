@@ -106,28 +106,28 @@ public class FoodTruck {
 
     public static class Coordinates {
 
-        public Coordinates(double x, double y) {
-            this.x = x;
-            this.y = y;
+        public Coordinates(double lon, double lat) {
+            this.lon = lon;
+            this.lat = lat;
         }
 
-        public double getX() {
-            return x;
+        public double getLon() {
+            return lon;
         }
 
-        public void setX(double x) {
-            this.x = x;
+        public void setLon(double lon) {
+            this.lon = lon;
         }
 
-        public double getY() {
-            return y;
+        public double getLat() {
+            return lat;
         }
 
-        public void setY(double y) {
-            this.y = y;
+        public void setLat(double lat) {
+            this.lat = lat;
         }
 
-        private double x;
-        private double y;
+        private double lon;
+        private double lat;
     }
 }

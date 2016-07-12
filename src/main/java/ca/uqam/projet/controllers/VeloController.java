@@ -22,22 +22,22 @@ public class VeloController {
             return VeloRepository.findAll();
         }
         //il faut que je finise ici
-        double coordX, coordY;
+        double lon, lat;
         try {
-            coordY = Double.parseDouble(y);
-            coordX = Double.parseDouble(x);
+            lat = Double.parseDouble(y);
+            lon = Double.parseDouble(x);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
 
-        return removeAllVeloToFar(VeloRepository.findAll(), coordX, coordY);
+        return removeAllVeloToFar(VeloRepository.findAll(), lon, lat);
     }
 
     //la partis plus bas est à refaire c'est un peu getho
-    private List<Velo> removeAllVeloToFar(List<Velo> liste, double veloX, double veloY) {
+    private List<Velo> removeAllVeloToFar(List<Velo> liste, double foodTruckLon, double foodTruckLat) {
 
         for (int i = 0; i < liste.size(); i++) {
-            if (Distance.distance(veloX, veloY, liste.get(i).getX(), liste.get(i).getY(), "K") > Global.DISTANCE_MAXIMAL_DU_FOODTRUCK) {
+            if (Distance.distance(foodTruckLat, foodTruckLon, liste.get(i).getLat(), liste.get(i).getLon(), "K") > Global.DISTANCE_MAXIMAL_DU_FOODTRUCK) {
                 liste.set(i, null);
             }
         }

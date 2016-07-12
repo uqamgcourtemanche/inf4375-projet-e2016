@@ -67,6 +67,4 @@ public class FetchBixi {
         public int nbEmptyDocks;
         public int lastUpdateTime;
     }
-
-    //<iframe width="700" height="400" src="http://donnees.ville.montreal.qc.ca/dataset/arceaux-velos/resource/78dd2f91-2e68-4b8b-bb4a-44c1ab5b79b6/view/dc59d539-6276-4f02-b2b5-6ffbb26ca007" frameBorder="0"></iframe>
 }

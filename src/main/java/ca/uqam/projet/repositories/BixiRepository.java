@@ -15,7 +15,7 @@ public class BixiRepository {
         String queryPoint = "POINT(" + Double.toString(x) + " " + Double.toString(y) + ")";
         String query = "select * from bixi where "
                 + "ST_DWithin( "
-                + "ST_SetSRID(ST_MakePoint(bixi.x, bixi.y), 4326), "
+                + "ST_SetSRID(ST_MakePoint(bixi.lon, bixi.lat), 4326), "
                 + "ST_GeogFromText('" + queryPoint + "'), " + queryDist + ");";
 
         System.out.println(query);
@@ -27,23 +27,23 @@ public class BixiRepository {
                         rs.getString("terminal_name"),
                         rs.getInt("nb_bikes"),
                         rs.getInt("nb_empty_docks"),
-                        rs.getDouble("x"),
-                        rs.getDouble("y"))
+                        rs.getDouble("lon"),
+                        rs.getDouble("lat"))
         );
 
         return result;
     }
 
     public static List<StationBixi> findAll() {
-        List<StationBixi> result = Application.app.jdbcTemplate.query("SELECT id, name, terminal_name, nb_bikes, nb_empty_docks, x, y from bixi",
+        List<StationBixi> result = Application.app.jdbcTemplate.query("SELECT id, name, terminal_name, nb_bikes, nb_empty_docks, lon, lat from bixi",
                 (rs, rowNum) -> new StationBixi(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("terminal_name"),
                         rs.getInt("nb_bikes"),
                         rs.getInt("nb_empty_docks"),
-                        rs.getDouble("x"),
-                        rs.getDouble("y"))
+                        rs.getDouble("lon"),
+                        rs.getDouble("lat"))
         );
 
         return result;
@@ -75,12 +75,12 @@ public class BixiRepository {
     private static void updateStations(List<StationBixi> stations) {
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
-            args.add(new Object[]{s.getName(), s.getTerminalName(), s.getNbBikes(), s.getNbEmptyDocks(), s.getX(), s.getY(), s.getId()});
+            args.add(new Object[]{s.getName(), s.getTerminalName(), s.getNbBikes(), s.getNbEmptyDocks(), s.getLon(), s.getLat(), s.getId()});
         });
 
         Application.app.jdbcTemplate.batchUpdate(
                 "UPDATE bixi SET "
-                + "name = ?, terminal_name = ?, nb_bikes = ?, nb_empty_docks = ?, x = ?, y = ? where id = ?", args);
+                + "name = ?, terminal_name = ?, nb_bikes = ?, nb_empty_docks = ?, lon = ?, lat = ? where id = ?", args);
     }
 
     private static void createStations(List<StationBixi> stations) {
@@ -90,11 +90,11 @@ public class BixiRepository {
 
         List<Object[]> args = new LinkedList<>();
         stations.forEach((s) -> {
-            args.add(new Object[]{s.getId(), s.getName(), s.getTerminalName(), s.getNbBikes(), s.getNbEmptyDocks(), s.getX(), s.getY()});
+            args.add(new Object[]{s.getId(), s.getName(), s.getTerminalName(), s.getNbBikes(), s.getNbEmptyDocks(), s.getLon(), s.getLat()});
         });
 
         Application.app.jdbcTemplate.batchUpdate(
-                "INSERT INTO bixi(id, name, terminal_name, nb_bikes, nb_empty_docks, x, y) "
+                "INSERT INTO bixi(id, name, terminal_name, nb_bikes, nb_empty_docks, lon, lat) "
                 + "VALUES (?,?,?,?,?,?,?)", args);
     }
 

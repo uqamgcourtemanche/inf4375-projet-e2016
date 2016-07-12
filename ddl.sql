@@ -1,7 +1,5 @@
 -- Table: public.foodtrucks
-
--- DROP TABLE public.foodtrucks;
-
+DROP TABLE public.foodtrucks;
 CREATE TABLE public.foodtrucks
 (
   id text NOT NULL,
@@ -14,10 +12,9 @@ WITH (
 ALTER TABLE public.foodtrucks
   OWNER TO web_server;
 
+
 -- Table: public.truck_location
-
--- DROP TABLE public.truck_location;
-
+DROP TABLE public.truck_location;
 CREATE TABLE public.truck_location
 (
   date date NOT NULL,
@@ -34,10 +31,9 @@ WITH (
 ALTER TABLE public.truck_location
   OWNER TO web_server;
 
+
 -- Table: public.bixi
-
--- DROP TABLE public.bixi;
-
+DROP TABLE public.bixi;
 CREATE TABLE public.bixi
 (
   id integer NOT NULL,
@@ -45,8 +41,8 @@ CREATE TABLE public.bixi
   terminal_name text,
   nb_bikes integer,
   nb_empty_docks integer,
-  x double precision,
-  y double precision,
+  lon double precision,
+  lat double precision,
   CONSTRAINT bixi_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -56,16 +52,13 @@ ALTER TABLE public.bixi
   OWNER TO postgres;
 
 
-
 -- Table: public.velo
-
--- DROP TABLE public.velo;
-
+DROP TABLE public.velo;
 CREATE TABLE public.velo
 (
   id text NOT NULL,
-  x double precision,
-  y double precision,
+  lon double precision,
+  lat double precision,
   CONSTRAINT velo_pkey PRIMARY KEY (id)
 )
 WITH (

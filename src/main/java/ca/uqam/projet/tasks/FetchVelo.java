@@ -83,8 +83,8 @@ public class FetchVelo {
             if (!((ArrayList) map.get("INV_ID")).get(i).equals("")) {
                 Velo velo = new Velo();
                 velo.setId(((ArrayList) map.get("INV_ID")).get(i).toString());
-                velo.setY(Double.parseDouble(((ArrayList) map.get("LONG")).get(i).toString()));
-                velo.setX(Double.parseDouble(((ArrayList) map.get("LAT")).get(i).toString()));
+                velo.setLon(Double.parseDouble(((ArrayList) map.get("LONG")).get(i).toString()));
+                velo.setLat(Double.parseDouble(((ArrayList) map.get("LAT")).get(i).toString()));
                 listVelo.add(velo);
             }
         }

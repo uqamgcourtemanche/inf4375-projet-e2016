@@ -3,19 +3,19 @@ package ca.uqam.projet.resources;
 public class Velo {
 
     private String id;
-    private double x;
-    private double y;
+    private double lon;
+    private double lat;
 
-    public Velo(String id, double x, double y) {
+    public Velo(String id, double lon, double lat) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.lon = lon;
+        this.lat = lat;
     }
 
     public Velo() {
         this.id = null;
-        this.x = Double.NaN;
-        this.y = Double.NaN;
+        this.lon = Double.NaN;
+        this.lat = Double.NaN;
     }
 
     public String getId() {
@@ -26,19 +26,19 @@ public class Velo {
         this.id = id;
     }
 
-    public double getX() {
-        return x;
+    public double getLon() {
+        return lon;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setLon(double x) {
+        this.lon = x;
     }
 
-    public double getY() {
-        return y;
+    public double getLat() {
+        return lat;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setLat(double y) {
+        this.lat = y;
     }
 }
